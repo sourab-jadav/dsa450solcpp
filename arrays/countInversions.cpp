@@ -17,13 +17,9 @@ void printArray(int arr[], int n) {
 // traverse through the map elements see any value is greater than
 // current value
 //   if it is greater then get it's result and add one to it
-int countInversions(int arr[], int low, int high) {
-    if (low<high) {
-        int mid = (low + high) / 2;
-        int result{};
-        result += countInversions(arr, low, mid);
-        result += countInversions(arr, mid+1, high);
-        int leftsize = mid - low + 1;
+int mergeArray(int arr[], int low, int mid, int high) {
+    int result{};
+    int leftsize = mid - low + 1;
         int rightsize = high - mid;
         int left[leftsize];
         int right[rightsize];
@@ -53,9 +49,18 @@ int countInversions(int arr[], int low, int high) {
         while (j<rightsize) {
             arr[k++] = right[j++];
         }
-        return result;
+        return result;    
+}
+
+int countInversions(int arr[], int low, int high) {
+    int result{};
+    if (low<high) {
+        int mid = (low + high) / 2;
+        result += countInversions(arr, low, mid);
+        result += countInversions(arr, mid + 1, high);
+        result += mergeArray(arr, low, mid, high);        
     }    
-        return 0;
+    return result;
 }
 int main() {
 
