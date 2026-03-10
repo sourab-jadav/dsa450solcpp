@@ -1,6 +1,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <unordered_set>
 #include <vector>
 using namespace std;
 void printarray(vector<int> &vec) {
@@ -9,8 +10,8 @@ void printarray(vector<int> &vec) {
     }
     cout << endl;
 }
-int main(int argc, char *argv[]) {
-    vector<int> arr{2, 6, 1, 9, 4, 5, 3};
+
+int methodOneUsingSorting(vector<int> &arr) {
     int n = arr.size();
     /**
      * longest consecutive subsequence
@@ -35,6 +36,48 @@ int main(int argc, char *argv[]) {
         }
     }
     cout << result << "\n";
+
+    return result;
+}
+
+int main(int argc, char *argv[]) {
+    // vector<int> arr{2, 6, 1, 9, 4, 5, 3}; //passed
+    // vector<int> arr{1, 9, 3, 10, 4, 20, 2}; //passed
+    vector<int> arr{15, 13, 12, 14, 11, 10, 9}; //passed
+
+    // method 2 : hashing /////////////////////////////////////////////////////
+
+    /**
+     * 1 idea is to put everything into the hashset
+     * traverse arr elements one by one
+     *     look for element with value arr[i]-1 until it becomes 0
+     *         if you found element in set do result++
+     */
+
+    int n=arr.size();
+    unordered_set<int>s(arr.begin(),arr.end());
+    int result=1;
+    for (int i=0; i<n; ++i) {
+        int subresult=1;
+        int temp=arr[i];
+        while (--temp>=0 && s.find(temp)!=s.end()) {
+            subresult++;
+        }
+        temp=arr[i];
+        while (s.find(++temp)!=s.end()) {
+            subresult++;
+        }
+        if (subresult>=n/2) {
+            result = subresult;
+            break;
+        }else {
+            result=max(result,subresult);
+        }
+    }
+    sort(arr.begin(), arr.end());
+    printarray(arr);
+    cout << "result is "<<result << "\n";
+
 
     return 0;
 }
