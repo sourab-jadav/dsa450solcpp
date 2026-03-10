@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
     // vector<int> arr{-2, 6, -3, -10, 0, 2}; //passed
     // vector<int> arr{-1, -3, -10, 0, 6}; //passed
-    vector<int> arr{2, 3, 4} ;  // failing
+    vector<int> arr{2, 3, 4} ;  // now it's passed
     /**
      * one thought is maintain two products
      * positive product
@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
      *
      */
     if (arr.size() > 0) {
-    int max_pos = 1;
-    int max_neg = 1;
+    int max_pos = arr[0];
+    int max_neg = arr[0];
     int result = arr[0];
     for (int i=1; i<arr.size(); ++i) {
         if (arr[i]==0) {
