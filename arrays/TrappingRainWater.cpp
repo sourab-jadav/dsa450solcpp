@@ -15,6 +15,17 @@ using namespace std;
  * instead of index here we can easily solve with the left max
  * and the right max value so far
  */
+void printArray(vector<int> &vec, int arr[]) {
+    int n=vec.size();
+    for (int i = 0; i < n; i++) {
+        cout << vec[i] << " ";
+    }
+    cout << "\n";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout<<endl;
+}
 
 int main(int argc, char *argv[]) {
     // vector<int> vec{3, 0, 1, 0, 4, 0, 2};
@@ -31,50 +42,38 @@ int main(int argc, char *argv[]) {
      * there is a need to handle the edge cases
      *
      */
-    leftmax[0] = 0;
-    rightmax[n - 1] = n - 1;    // edge cases now are handled
+    leftmax[0] = vec[0];
+    rightmax[n - 1] = vec[n - 1];    // edge cases now are handled
 
     for (int i = 1; i < n; i++) {
-        if (vec[i] > vec[leftmax[i - 1]]) {
-            leftmax[i] = i;
+        if (vec[i] > leftmax[i - 1]) {
+            leftmax[i] = vec[i];
         } else {
             leftmax[i] = leftmax[i - 1];
         }
     }
-    for (int i = 0; i < n; i++) {
-        cout << vec[i] << " ";
-    }
-    cout << "\n";
-    for (int i = 0; i < n; i++) {
-        cout << vec[leftmax[i]] << " ";
-    }
+    printArray(vec, leftmax);
 
     for (int i = n - 2; i >= 0; i--) {
-        if (vec[i] > vec[rightmax[i + 1]]) {
-            rightmax[i] = i;
+        if (vec[i] > rightmax[i + 1]) {
+            rightmax[i] = vec[i];
         } else {
             rightmax[i] = rightmax[i + 1];
         }
     }
     cout << endl;
     cout << "===================================" << endl;
-    for (int i = 0; i < n; i++) {
-        cout << vec[i] << " ";
-    }
-    cout << "\n";
-    for (int i = 0; i < n; i++) {
-        cout << vec[rightmax[i]] << " ";
-    }
+    printArray(vec, rightmax);
     int result{};
     cout << endl;
     for (int i = 1; i <= n - 2; i++) {
         int temp{};
-        if (vec[leftmax[i]] > vec[rightmax[i]]) {
+        if (leftmax[i] > rightmax[i]) {
             temp =
-                ((vec[leftmax[i]] - (vec[leftmax[i]] - vec[rightmax[i]])) - vec[i]);
+                ((leftmax[i] - (leftmax[i] - rightmax[i])) - vec[i]);
         } else {
             temp =
-                ((vec[rightmax[i]] - (vec[rightmax[i]] - vec[leftmax[i]])) - vec[i]);
+                ((rightmax[i] - (rightmax[i] - leftmax[i])) - vec[i]);
         }
         cout << temp << " ";
         result += temp;
