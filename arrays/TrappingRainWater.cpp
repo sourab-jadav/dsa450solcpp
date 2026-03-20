@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <vector>
@@ -26,13 +27,10 @@ void printArray(vector<int> &vec, int arr[]) {
     }
     cout<<endl;
 }
-
-int main(int argc, char *argv[]) {
+void prefixSuffixmethod(vector<int>&vec){
     // vector<int> vec{3, 0, 1, 0, 4, 0, 2};
     // vector<int>vec = {3, 0, 2, 0, 4}; // passed
-    vector<int> vec = {1, 2, 3, 4};
     int n = vec.size();
-
     int leftmax[n];
     int rightmax[n];
     memset(leftmax, -1, sizeof(leftmax));
@@ -67,21 +65,16 @@ int main(int argc, char *argv[]) {
     int result{};
     cout << endl;
     for (int i = 1; i <= n - 2; i++) {
-        int temp{};
-        if (leftmax[i] > rightmax[i]) {
-            temp =
-                ((leftmax[i] - (leftmax[i] - rightmax[i])) - vec[i]);
-        } else {
-            temp =
-                ((rightmax[i] - (rightmax[i] - leftmax[i])) - vec[i]);
-        }
-        cout << temp << " ";
-        result += temp;
+        int minval = min(leftmax[i], rightmax[i]);
+        result+=minval-vec[i];
     }
     cout << endl;
     cout << result;
-    cout << "someting"
-         << "\n";
+}
+
+int main(int argc, char *argv[]) {
+    vector<int> vec = {1, 2, 3, 4};
+    // prefixSuffixmethod(vec);
 
     return 0;
 }
