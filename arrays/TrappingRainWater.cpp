@@ -104,18 +104,12 @@ int usingTwoPointer(vector<int> &vec) {
          *     let's not handle lmax = rmax sepeartely
          */
         if (leftmax <= rightmax) {
-            if (vec[left] < leftmax) {
-                result += leftmax - vec[left];
-            } else {
-                leftmax = vec[left];
-            }
+            result+=max(0,leftmax-vec[left]);
+            leftmax = max(leftmax, vec[left]);
             left++;
         } else if (rightmax < leftmax) {
-            if (vec[right] < rightmax) {
-                result += rightmax - vec[right];
-            } else {
-                rightmax = vec[right];
-            }
+            result+=max(0,rightmax-vec[right]);
+            rightmax = max(rightmax, vec[right]);
             right--;
         }
     }
