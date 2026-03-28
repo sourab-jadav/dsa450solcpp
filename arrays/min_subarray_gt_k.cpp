@@ -131,6 +131,41 @@ int smallestsubsumBS_STL(vector<int> &arr, int x) {
     return res;
 }
 
+int usingtwoPointer(int x, vector<int> &arr)
+{
+
+    int i = 0, j = 0;
+    int sum = 0;
+    int ans = INT_MAX;
+
+    while (j < arr.size())
+    {
+        while (j < arr.size() && sum <= x)
+        {
+            sum += arr[j++];
+        }
+        if (j == arr.size() && sum <= x)
+            break;
+
+        // Minimize window from start while maintaining sum > x
+        while (i < j && sum - arr[i] > x)
+        {
+            sum -= arr[i++];
+        }
+
+        ans = min(ans, j - i);
+
+        // Remove current start element and shift window
+        sum -= arr[i];
+        i++;
+    }
+    if (ans == INT_MAX)
+        return 0;
+    return ans;
+}
+
+
+
 int main(int argc, char *argv[]) {
 
   vector<int> arr = {6829, 3917, 171, 3654};
