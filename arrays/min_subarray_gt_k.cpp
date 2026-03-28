@@ -103,29 +103,48 @@ int smallestSubWithSumUsingBS(int x, vector<int> &arr) {
   }
   return minval;
 }
+/**
+ * using the same previous bs logic but using stl
+ * https://www.geeksforgeeks.org/dsa/minimum-length-subarray-sum-greater-given-value/
+ */
+int smallestsubsumBS_STL(vector<int> &arr, int x) {
 
-        if (temp != INT_MAX) {
-            cout << "temp value is " << temp << "\n";
-            minval = min(minval, temp - i + 1);
+    int n = arr.size();
+    int res = INT_MAX;
+    vector<int> pre_sum(n + 1, 0);
+    // we also need a prefix sum value where we don't select anything
+
+    for (int i = 1; i <= n; i++)
+        pre_sum[i] = pre_sum[i - 1] + arr[i - 1];
+
+    for (int i = 1; i <= n; i++) {
+        int toFind = x + pre_sum[i - 1];
+        auto bound = lower_bound(pre_sum.begin(), pre_sum.end(), toFind);
+        if (bound != pre_sum.end() && *bound != toFind) {
+            int len = bound - (pre_sum.begin() + i - 1);
+            res = min(res, len);
         }
     }
-    return minval;
+    if (res==INT_MAX) {
+        return 0;
+    }
+    return res;
 }
 
 int main(int argc, char *argv[]) {
 
-    vector<int> arr = {6829, 3917, 171, 3654};
-    int x = 12829;
+  vector<int> arr = {6829, 3917, 171, 3654};
+  int x = 12829;
 
-    cout << "the array values are "
-         << "\n";
+  cout << "the array values are "
+       << "\n";
 
-    for (auto x : arr) {
-        cout << x << " ";
-    }
-    cout << endl;
+  for (auto x : arr) {
+    cout << x << " ";
+  }
+  cout << endl;
 
-    cout << smallestSubWithSum(x, arr);
+  cout << smallestSubWithSumUsingBS(x, arr);
 
-    return 0;
+  return 0;
 }
