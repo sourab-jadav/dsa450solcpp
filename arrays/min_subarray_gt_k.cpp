@@ -45,13 +45,87 @@ int smallestSubWithSum(int x, vector<int> &arr) {
   return result;
 }
 
+/**
+ * another way is using prefix sum and binary search
+ * create a prefix sum array
+ * in a prefix sum array
+ *
+ * from value at index i+1 to n-1
+ *     look for the value at j where prefix[j] > prefix[i]+x
+ *     whatever i you pass you should include that i
+ */
+int binarySearch(vector<int> prefix, int x, int i) {
+    cout << "i value is " << i << "\n";
+    cout << "x value is " << x << "\n";
+
+    int low = i;
+    int n = prefix.size();
+    int high = n - 1;
+    int result = INT_MAX;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        cout << "mid value is " << mid << "\n";
+        if ((i == 0 && prefix[mid] > x) || prefix[mid] > prefix[i - 1] + x) {
+            cout << "inside mid at " << mid << "\n";
+            result = mid;
+            high = mid - 1;
+        } else if (prefix[mid] <= prefix[i] + x) {
+            low = mid + 1;
+        }
+    }
+    return result;
+}
+/**
+ * this is working solution with all test cases passed
+ */
+int smallestSubWithSumUsingBS(int x, vector<int> &arr) {
+  int sum{};
+  vector<int> prefix;
+  for (auto val : arr) {
+    sum += val;
+    prefix.push_back(sum);
+  }
+  cout << "prefix array is "
+       << "\n";
+  for (auto x : prefix) {
+    cout << x << " ";
+  }
+  cout << endl;
+  int n = prefix.size();
+  int minval = INT_MAX;
+  for (int i = 0; i < n - 1; i++) {
+    int temp = binarySearch(prefix, x, i);
+
+    if (temp != INT_MAX) {
+      cout << "temp value is " << temp << "\n";
+      minval = min(minval, temp - i + 1);
+    }
+  }
+  return minval;
+}
+
+        if (temp != INT_MAX) {
+            cout << "temp value is " << temp << "\n";
+            minval = min(minval, temp - i + 1);
+        }
+    }
+    return minval;
+}
+
 int main(int argc, char *argv[]) {
 
-  // vector<int>arr = {1, 4, 45, 6, 0, 19};
-  vector<int> arr = {1, 10, 5, 2, 7};
-  int x = 51;
+    vector<int> arr = {6829, 3917, 171, 3654};
+    int x = 12829;
 
-  cout << smallestSubWithSum(x, arr);
+    cout << "the array values are "
+         << "\n";
 
-  return 0;
+    for (auto x : arr) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+    cout << smallestSubWithSum(x, arr);
+
+    return 0;
 }
