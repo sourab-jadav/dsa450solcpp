@@ -41,8 +41,8 @@ int main(int argc, char *argv[]) {
     // if it is <= k we decrease the swap count if arr[i-k] was part of swap
     // but we don't know the leftmost part of the window is part of swap or not
     //
+    result = sp;
     for (int i = good; i < n; i++) {
-        result = min(result, sp);
         if (arr[i - good] > k) {
             if (arr[i] <= k) {
                 sp--;
@@ -52,8 +52,9 @@ int main(int argc, char *argv[]) {
                 sp++;
             }
         }
+        result=min(result,sp);
     }
-    result=min(result,sp);
+
     cout << result << "\n";
 
     return 0;
