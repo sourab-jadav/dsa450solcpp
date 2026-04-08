@@ -67,10 +67,39 @@ int sol1usingmin_heap(vector<int>&heights){
     return result;
 }
 
+
+/**
+ * another solution would be
+ * for each element move towards it's left and right
+ * and calculate the max key*count
+ */
+int sol2usingfor_loop(vector<int> &heights) {
+    int n=heights.size();
+    int result{};
+    for (int i = 0; i < n; i++) {
+        int val=heights[i];
+        int j=i-1;
+        int count =1;
+        while (j>=0 && heights[j]>=val) {
+            j--;
+            count++;
+        }
+        j=i+1;
+        while (j<n && heights[j]>=val) {
+            j++;
+            count++;
+        }
+        result=max(result,val*count);
+    }
+    return result;
+}
+
+
 int main(int argc, char *argv[])
 {
     // vector<int>vec= {60, 20, 50, 40, 10, 50, 60};//test case passed
     vector<int>heights={3,5,1,7,5,9};
+    cout << sol2usingfor_loop(heights) << "\n";
 
 
 
