@@ -127,7 +127,7 @@ int sol3usingstacks(vector<int> &heights) {
     // if stk is not empty do ps[i]=stk.top;
     //
     for (int i = 0; i < n; i++) {
-        while (!stk.empty() && heights[stk.top()] > heights[i]) {
+        while (!stk.empty() && heights[stk.top()] >= heights[i]) {
             stk.pop();
         }
         if (!stk.empty()) {
@@ -145,7 +145,7 @@ int sol3usingstacks(vector<int> &heights) {
     // which you already visited
     // instead of complicating it can we traverse from right to left
     for (int i = n - 1; i >= 0; i--) {
-        while (!stk.empty() && heights[stk.top()]> heights[i]) {
+        while (!stk.empty() && heights[stk.top()]>= heights[i]) {
             stk.pop();
         }
         if (!stk.empty()) {
@@ -184,10 +184,6 @@ int main(int argc, char *argv[])
     vector<int>heights={1,1}; //failed
     // cout << sol2usingfor_loop(heights) << "\n";
     cout<<sol3usingstacks(heights);
-
-
-
-
 
     return 0;
 }
