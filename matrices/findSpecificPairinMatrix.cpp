@@ -100,29 +100,36 @@ It's Correct output is:
 7
 
  */
-int method3_using_two_array(vector<vector<int>>mat){
+int method3_using_two_array(vector<vector<int>> mat) {
+    // we have a matrix
     int n=mat.size();
+    // the idea is to have two arrays
+    // we need max value until i+1 ,j+1
+    // hint is to use two arrays
+    //
+    // if index at n-1 n-1 is consider
+    // we need to start from n-2 n-2
+    //
 
-    vector<int>col(n,0);
+    // let's fill the last row first
     vector<int>row(n,0);
-
-    col[n-1]=mat[n-1][n-1];
     row[n-1]=mat[n-1][n-1];
-
-    for(int i=n-2;i>=0;i--){
-        col[i]=max(mat[i][n-1],col[i+1]);
-        row[i]=max(mat[n-1][i],row[i+1]);
-        }
-    int result{};
+    vector<int>next_row(n,0);
     for (int i = n - 2; i >= 0; i--) {
-        for(int j=n-2;j>=0;j--){
-            int max_val=max(col[i+1],row[i+1]);
-            if (max_val>mat[i][j]) {
-                result=max(result,max_val-mat[i][j]);
-            }
-        }
+        row[i]=max(mat[n-1][i],row[i+1]);
     }
-
+    int result=INT_MIN;
+    // now that last row is filled with max value from r to l
+    for (int i = n - 2; i >= 0; i--) {
+        next_row[n-1]=max(mat[i][n-1],row[n-1]);
+        for (int j = n - 2; j >= 0; j--) {
+            if (row[j+1]-mat[i][j]>result) {
+                result=row[j+1]-mat[i][j];
+            }
+            next_row[j]=max(mat[i][j],max(row[j],next_row[j+1]));
+        }
+        row=next_row;
+    }
     return result;
 }
 
