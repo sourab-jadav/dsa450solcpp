@@ -82,6 +82,49 @@ int usingAuxilaryMatrix(vector<vector<int>>mat,int m,int n){
     return result;
 }
 
+/**
+ * method 3
+ * instead of using aux matrix can we optimize it further
+ * since we are only concerned with i+1,j and i,j+1
+ * we can create two array which stores the max values at i+1,j and i,j+1
+ *
+4
+
+3 -1 0 2
+-2 -5 1 -5
+-1 5 0 0
+-3 -3 -4 -2
+Your Code's output is:
+5
+It's Correct output is:
+7
+
+ */
+int method3_using_two_array(vector<vector<int>>mat){
+    int n=mat.size();
+
+    vector<int>col(n,0);
+    vector<int>row(n,0);
+
+    col[n-1]=mat[n-1][n-1];
+    row[n-1]=mat[n-1][n-1];
+
+    for(int i=n-2;i>=0;i--){
+        col[i]=max(mat[i][n-1],col[i+1]);
+        row[i]=max(mat[n-1][i],row[i+1]);
+        }
+    int result{};
+    for (int i = n - 2; i >= 0; i--) {
+        for(int j=n-2;j>=0;j--){
+            int max_val=max(col[i+1],row[i+1]);
+            if (max_val>mat[i][j]) {
+                result=max(result,max_val-mat[i][j]);
+            }
+        }
+    }
+
+    return result;
+}
 
 int main(int argc, char *argv[])
 {
