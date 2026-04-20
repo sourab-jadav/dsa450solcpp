@@ -1,5 +1,6 @@
 #include <iostream>
 #include <type_traits>
+#include <utility>
 #include <vector>
 using namespace std;
 void printMatrix(vector<vector<int>> vec) {
@@ -24,9 +25,16 @@ Expected
  */
 int main(int argc, char *argv[])
 {
- vector<vector<int>>matrix = {{1, 2, 3},
-                             {4, 5, 6},
-                             {7, 8, 9}};
+ // vector<vector<int>>matrix = {{1, 2, 3},
+ //                             {4, 5, 6},
+ //                             {7, 8, 9}};
+    vector<vector<int>> matrix = {
+        {5,1,9,11},
+        {2,4,8,10},
+        {13,3,6,7},
+
+        {15,14,12,16}
+    };
  // we need to rotate matrix
  // the matrix will be square matrix
  // printMatrix(vec);
@@ -48,29 +56,40 @@ int main(int argc, char *argv[])
   */
  // 2.1
  int n=matrix.size();
- for(int j=0;j<n;j++){
-     swap(matrix[0][j],matrix[n-1][j]);
+ // printMatrix(matrix);
+ // cout<<"==============="<<endl;
+ for(int i=0;i<=n-2;i++){
+     for(int j=i;j<n-i;j++){
+         swap(matrix[i][j],matrix[n-1-i][j]);
+     }
+     // cout<<"swapping top and bottom row"<<endl;
+     // printMatrix(matrix);
+     for (int k = i; k < n - i; k++) {
+         swap(matrix[n-1-i][k],matrix[k][n-1-i]);
+     }
+     // cout<<"after swapping bottom row and right row "<<endl;
+     // printMatrix(matrix);
+
+     for(int l=i;l<n-i-1;l++){
+         swap(matrix[i][l],matrix[l][i]);
+     }
+     // cout<<"after swapping top row and left column "<<endl;
+     // printMatrix(matrix);
+
+     int low=i+1;
+     int high=n-2-i;
+     while (low<high) {
+         swap(matrix[i][low],matrix[i][high]);
+         swap(matrix[n-1-i][low],matrix[n-1-i][high]);
+         low++;
+         high--;
+     }
+     // cout<<"============="<<endl;
+
  }
- // cout<<"swapping top and bottom row"<<endl;
- // printMatrix(vec);
- for (int i = 0; i < n; i++) {
-     swap(matrix[n-1][i],matrix[i][n-1]);
- }
- // cout<<"swapping leftmost and bottom row"<<endl;
- // printMatrix(vec);
- for (int i = 0; i < n-1; i++) {
-     swap(matrix[0][i],matrix[i][0]);
- }
- // cout<<"swapping top and leftmost row"<<endl;
- int low =1;
- int high=n-2;
- while (low<high) {
-     swap(matrix[0][low],matrix[0][high]);
-     swap(matrix[n-1][low],matrix[n-1][high]);
-     low++;
-     high--;
- }
- printMatrix(matrix);
+ // cout << "final" << endl;
+ // printMatrix(matrix) ;
+
 
     return 0;
 }
