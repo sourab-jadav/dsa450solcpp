@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 using namespace std;
@@ -29,65 +30,61 @@ int main(int argc, char *argv[])
   //                         {27, 50, 87, 93},
   //                         {36, 78, 87, 94}};
 
-  vector<vector<int>>mat{{10, 20, 30, 40},
-                         {15, 25, 35, 45},
-                          {24, 29, 37, 48},
-                          {32, 33, 39, 50}};
+  // vector<vector<int>>mat{{10, 20, 30, 40},
+  //                        {15, 25, 35, 45},
+  //                         {24, 29, 37, 48},
+  //                         {32, 33, 39, 50}};
+    vector<vector<int>>mat
+        {
+            {
+                8,12
+            },
+            {
+                10,18
+            }
+        };
+
   int n=mat.size();
-  // say we want 7th element
-  // if you observe the diagonal
-  // top left most diagonal element will be the smallest
-  // and bottom right most diagonal element will be the largest
-
-  // say we want 7th smallest then
-  // 1*1 will have 1 element smallest to largest
-  // 2*2 will have 4 elements smallest to largest
-  // 3*3 will have 9 elements smallest to largest
-
-  // since we want 7th
-  // it will be between 2*2 and 3*3
-  // 3*3 th element is the 9th element
-  // on the 9th element check along it's top and left
-  // see which is largest and count it accordingly
-  int rc=7;
- int i=1;
-  while (i*i<rc) {
-      i++;
-  }
-
-  int result{};
-  int count=i*i;
-  if (count==rc) {
-      cout << mat[i][i] << "\n";
-  }
-  i=i-1;
-  int j1=i-1;
-  int j2=i-1;
-  while (j1>=0 && j2>=0) {
-      if (mat[i][j1]>mat[j2][i]) {
-          count--;
-          if (count==rc) {
-              result=mat[i][j1];
-              break;
+  // another idea is
+  // we have the most smallest element for sure
+  vector<pair<int, int>>indices;
+  indices.push_back(make_pair(0, 0));
+  vector<vector<bool>>visited(n,vector<bool>(n,false));
+  visited[0][0]=true;
+  int rq=4;
+  while (indices.size()!=rq) {
+      vector<pair<int, int>>temp;
+      for (auto indice : indices) {
+          int i=indice.first;
+          int j=indice.second;
+          if (i+1<n && visited[i+1][j]==false) {
+              temp.push_back(make_pair(i+1, j));
           }
-          j1--;
-      }else if (mat[j2][i]>mat[i][j1]) {
-          count--;
-          if (count==rc) {
-              result=mat[j2][i];
-              break;
+          if (j+1<n && visited[i][j+1]==false) {
+              temp.push_back(make_pair(i, j+1));
           }
-          j2--;
-      }else {
-          count-=2;
-          if (count<=rc) {
-              result=mat[i][j1];
-              break;
-          }
-          j1--;
-          j2--;
       }
+      pair<int, int>smallest
+          {
+              -1,-1
+          };
+      for (auto p : temp) {
+          int i=p.first;
+          int j=p.second;
+          if (smallest.first==-1 || mat[i][j] < mat[smallest.first][smallest.second]) {
+              smallest=
+                  {
+                      i,j
+                  };
+          }
+      }
+      visited[smallest.first][smallest.second]=true;
+      indices.push_back(smallest);
+      cout << "the smallest value is "<<smallest.first <<" "<<smallest.second << "\n";
   }
-  return result;
+
+  int result=mat[indices.back().first][indices.back().second];
+cout << result << "\n";
+
 
 }
