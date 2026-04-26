@@ -33,44 +33,61 @@ int main(int argc, char *argv[])
                          {15, 25, 35, 45},
                           {24, 29, 37, 48},
                           {32, 33, 39, 50}};
-  int hr=0;
-  int hc=1;
-  int vr=1;
-  int vc=0;
-  int count=1;
-  int rq=7;
-  int smallest=mat[0][0];
-  if (rq==1) {
-      cout<<mat[0][0]<<endl;
-  }
-  while (count<rq) {
-      if (mat[vr][vc]<mat[hr][hc]) {
-          smallest=mat[vr][vc];
-          cout << "vr vc value is at "<< vr<< vc << "\n";
-          if (mat[vr+1][vc]<mat[vr][vc+1]) {
-              vr=vr+1;
-          }else {
-              vc=vc+1;
-          }
+  int n=mat.size();
+  // say we want 7th element
+  // if you observe the diagonal
+  // top left most diagonal element will be the smallest
+  // and bottom right most diagonal element will be the largest
 
+  // say we want 7th smallest then
+  // 1*1 will have 1 element smallest to largest
+  // 2*2 will have 4 elements smallest to largest
+  // 3*3 will have 9 elements smallest to largest
 
-      } else {
-          cout << "hr hc value is at "<<hr<<hc << "\n";
-          smallest=mat[hr][hc];
-          if (mat[hr+1][hc]<mat[hr][hc+1]) {
-              hr=hr+1;
-          } else {
-              hc=hc+1;
-          }
-
-      }
-      if (++count==rq) {
-          cout<<"smallest is "<<smallest<<endl;
-          break;
-      }
+  // since we want 7th
+  // it will be between 2*2 and 3*3
+  // 3*3 th element is the 9th element
+  // on the 9th element check along it's top and left
+  // see which is largest and count it accordingly
+  int rc=7;
+ int i=1;
+  while (i*i<rc) {
+      i++;
   }
 
+  int result{};
+  int count=i*i;
+  if (count==rc) {
+      cout << mat[i][i] << "\n";
+  }
+  i=i-1;
+  int j1=i-1;
+  int j2=i-1;
+  while (j1>=0 && j2>=0) {
+      if (mat[i][j1]>mat[j2][i]) {
+          count--;
+          if (count==rc) {
+              result=mat[i][j1];
+              break;
+          }
+          j1--;
+      }else if (mat[j2][i]>mat[i][j1]) {
+          count--;
+          if (count==rc) {
+              result=mat[j2][i];
+              break;
+          }
+          j2--;
+      }else {
+          count-=2;
+          if (count<=rc) {
+              result=mat[i][j1];
+              break;
+          }
+          j1--;
+          j2--;
+      }
+  }
+  return result;
 
-
-    return 0;
 }
