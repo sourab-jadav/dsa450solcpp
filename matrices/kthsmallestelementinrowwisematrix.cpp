@@ -1,5 +1,7 @@
 #include <algorithm>
+#include <functional>
 #include <iostream>
+#include <queue>
 #include <utility>
 #include <vector>
 
@@ -16,56 +18,53 @@ using namespace std;
  *
  *
  */
-int main(int argc, char *argv[])
-{
+// method 1 using min_heap
+int usingMinHeap(vector<vector<int>> mat) {
+    int n = mat.size();
+    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>,
+                   greater<pair<int, pair<int, int>>>>
+        pq;
+    vector<vector<bool>> visited(n, vector<bool>(n, false));
+    pq.push({mat[0][0], {0, 0}});
+    visited[0][0] = true;
 
-  // vector<vector<int>>mat{{10, 20, 30, 40},
-  //                        {15, 25, 35, 45},
-  //                         {24, 29, 37, 48},
-  //                         {32, 33, 39, 50}};
-vector<vector<int>>mat {{16, 28, 60, 64},
-                        {22, 41, 63, 91},
-                         {27, 50, 87, 93},
-                         {36, 78, 87, 94}};
+    // we have the visited vector and
 
-  int n=mat.size();
-  // another idea is
-  // we have the most smallest element for sure
-  vector<pair<int, int>>indices;
-  indices.push_back(make_pair(0, 0));
-  vector<vector<bool>>visited(n,vector<bool>(n,false));
-  visited[0][0]=true;
-  int rq=3;
-  while (indices.size()!=rq) {
-      vector<pair<int, int>> temp;
-      pair<int, int>smallest
-          {
-              -1,-1
-          };
-      for (auto indice : indices) {
-          int i=indice.first;
-          int j=indice.second;
-          if (i+1<n && visited[i+1][j]==false && (smallest.first==-1|| mat[i+1][j] < mat[smallest.first][smallest.second])) {
-              smallest=
-                  {
-                      i+1,j
-                  };
-          }
-          if (j+1<n && visited[i][j+1]==false && (smallest.first==-1|| mat[i][j+1]< mat[smallest.first][smallest.second])) {
-              smallest=
-                  {
-                      i,j+1
-                  };
-          }
-      }
+    // now we will get the minimum element in the blink of an eye
+    int k = 5;
 
-      visited[smallest.first][smallest.second]=true;
-      indices.push_back(smallest);
-      cout << "the smallest value is "<<smallest.first <<" "<<smallest.second << "\n";
-  }
+    for (int i = 0; i < k - 1; i++) {
+        auto curr = pq.top();
+        pq.pop();
 
-  int result=mat[indices.back().first][indices.back().second];
-cout << result << "\n";
+        int r = curr.second.first;
+        int c = curr.second.second;
 
+        if (r + 1 < n && !visited[r + 1][c]) {
+            pq.push({mat[r + 1][c], {r + 1, c}});
+            visited[r + 1][c] = true;
+        }
+        if (c + 1 < n && !visited[r][c + 1]) {
+            pq.push({mat[r][c + 1], {r, c + 1}});
+            visited[r][c + 1] = true;
+        }
+    }
 
+    return pq.top().first;
+}
+
+int main(int argc, char *argv[]) {
+
+    // vector<vector<int>>mat{{10, 20, 30, 40},
+    //                        {15, 25, 35, 45},
+    //                         {24, 29, 37, 48},
+    //                         {32, 33, 39, 50}};
+    vector<vector<int>> mat{
+        {16, 28, 60, 64}, {22, 41, 63, 91}, {27, 50, 87, 93}, {36, 78, 87, 94}};
+
+    // the previous approaches are correct
+    // but to find the min element you can make use min_heap
+    // since heap by default provides max_heap you need to convert it to
+    // min heap using greater function
+    // usingMinHeap(mat);
 }
