@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <exception>
 #include <functional>
 #include <iostream>
 #include <queue>
@@ -6,6 +7,15 @@
 #include <vector>
 
 using namespace std;
+void printmat(vector<vector<int>> &mat) {
+    int n;
+    for (auto row : mat) {
+        for (auto v : row) {
+            cout << v << " ";
+        }
+        cout << endl;
+    }
+}
 /**
  * each row and column is sorted in non-decreasing order
  * find kth smallest element in the matrix
@@ -53,6 +63,60 @@ int usingMinHeap(vector<vector<int>> mat) {
     return pq.top().first;
 }
 
+/**
+ * the most efficient approach here will be
+ * to do binary search
+ * you have the minimum and maximum value
+ * get the mid of it
+ * see how many elements are smaller than mid
+ * if it is less than or equal k then you have to
+ *   then do ans=mid and low=mid+1;
+ * else high=mid-1;
+ */
+int usingBinarySearch(vector<vector<int>> &mat, int k) {
+
+    int n = mat.size();
+    int low = mat[0][0];
+    int high = mat[n - 1][n - 1];
+    int result{};
+
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        int count = 0;
+        bool cought=false;
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (i == j) {
+                    if (mat[i][j]>mid) {
+                        if (count>=k) {
+                            result=mid;
+                            high=mid-1;
+                        }else if (count < k) {
+                            low=mid+1;
+                        }
+                        cought=true;
+                        break;
+                    }else {
+                        count++;
+                    }
+                } else {
+                    if (mat[i][j] <= mid) {
+                        count++;
+                    }
+                    if (mat[j][i] <= mid) {
+                        count++;
+                    }
+                }
+
+            }
+            if (cought) {
+                break;
+            }
+        }
+    }
+
+    return result;
+}
 int main(int argc, char *argv[]) {
 
     // vector<vector<int>>mat{{10, 20, 30, 40},
@@ -60,6 +124,7 @@ int main(int argc, char *argv[]) {
     //                         {24, 29, 37, 48},
     //                         {32, 33, 39, 50}};
     vector<vector<int>> mat{
+
         {16, 28, 60, 64}, {22, 41, 63, 91}, {27, 50, 87, 93}, {36, 78, 87, 94}};
 
     // the previous approaches are correct
@@ -67,4 +132,10 @@ int main(int argc, char *argv[]) {
     // since heap by default provides max_heap you need to convert it to
     // min heap using greater function
     // usingMinHeap(mat);
+    int k = 9;
+    cout << "printing matrix" << endl;
+    printmat(mat);
+    cout << "===================================" << endl;
+
+    cout<<usingBinarySearch(mat, k);
 }
