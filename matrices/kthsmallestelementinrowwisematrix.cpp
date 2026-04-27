@@ -1,9 +1,5 @@
-#include <algorithm>
-#include <exception>
-#include <functional>
 #include <iostream>
 #include <queue>
-#include <utility>
 #include <vector>
 
 using namespace std;
@@ -73,6 +69,33 @@ int usingMinHeap(vector<vector<int>> mat) {
  *   then do ans=mid and low=mid+1;
  * else high=mid-1;
  */
+/**
+ * we need to count elements <= mid more efficiently
+ * from top to bottom if
+ * the bottommost element is <= mid then all elements above it
+ * will be <=mid
+ * make use of this idea and traverse all the columns from left to right
+ * and get the count
+ */
+int countLessEqual(vector<vector<int>>&mat,int mid)
+{
+    int n=mat.size();
+    int row=n-1;
+    int col = 0;
+    int count{};
+    while (row>=0 && col<n) {
+        if (mat[row][col]<=mid) {
+            count+=(row+1);
+            col++;
+
+        }else
+            {
+                row--;
+            }
+
+    }
+    return count;
+}
 int usingBinarySearch(vector<vector<int>> &mat, int k) {
 
     int n = mat.size();
@@ -83,35 +106,11 @@ int usingBinarySearch(vector<vector<int>> &mat, int k) {
     while (low <= high) {
         int mid = (low + high) / 2;
         int count = 0;
-        bool cought=false;
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j < n; j++) {
-                if (i == j) {
-                    if (mat[i][j]>mid) {
-                        if (count>=k) {
-                            result=mid;
-                            high=mid-1;
-                        }else if (count < k) {
-                            low=mid+1;
-                        }
-                        cought=true;
-                        break;
-                    }else {
-                        count++;
-                    }
-                } else {
-                    if (mat[i][j] <= mid) {
-                        count++;
-                    }
-                    if (mat[j][i] <= mid) {
-                        count++;
-                    }
-                }
-
-            }
-            if (cought) {
-                break;
-            }
+        if (countLessEqual(mat, mid)>=k) {
+            result=mid;
+            high=mid-1;
+        }else {
+            low=mid+1;
         }
     }
 
@@ -132,7 +131,7 @@ int main(int argc, char *argv[]) {
     // since heap by default provides max_heap you need to convert it to
     // min heap using greater function
     // usingMinHeap(mat);
-    int k = 9;
+    int k = 5;
     cout << "printing matrix" << endl;
     printmat(mat);
     cout << "===================================" << endl;
