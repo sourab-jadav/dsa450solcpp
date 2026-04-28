@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 /**
@@ -38,38 +39,26 @@ bool areRotationsByFirstCharCount(string &s1, string &s2) {
     int n=s1.size();
     cout << "n value "<<n << "\n";
 
-    int count =0;
+    vector<int>indices;
     for (int i = 0; i < n; i++) {
         if (s1[0]==s2[i]) {
-            count++;
+            indices.push_back(i);
         }
     }
-    cout << "count is "<<count << "\n";
 
-    for(int i=0;i<count;i++){
-        bool match=true;
-        for(int j=0;j<n;j++){
-            if (s1[0]==s2[j]) {
-                cout << "at j value "<<j << "\n";
 
-                int count =1;
-                int k=1;
-                int l=(j+1)%n;
-                while (k<n && s1[k]==s2[l]) {
-                    count++;
-                    k++;
-                    l=(l+1)%n;
-                }
-                if (count != n) {
-                    match=false;
-                }
-                if (match) {
-                    return true;
-                }
-            }
-            match=true;
+    for (auto v : indices) {
+        int i=1;
+        int j=(v+1)%n;
+        int count=1;
+        while (i<n && s1[i] == s2[j]) {
+            i++;
+            j=(j+1)%n;
+            count++;
         }
-
+        if (count==n) {
+            return true;
+        }
     }
     return false;
 }
