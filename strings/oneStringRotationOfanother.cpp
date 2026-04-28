@@ -31,36 +31,19 @@ bool areRotations(string &s1, string &s2) {
  * count the occurences of the first character
  *
  * traverse through the second string that many times
+ * this works but has worst case tc of o(n^2)
+ * this happens when string has many repeating characters
+ * causing you to check every possible starting index multiple times
+ *
+ * the most common way to optimize it is concatination trick
  */
 bool areRotationsByFirstCharCount(string &s1, string &s2) {
-    if (s1.size() != s2.size()) {
+    if (s1.size()!=s2.size()) {
         return false;
     }
     int n=s1.size();
-    cout << "n value "<<n << "\n";
-
-    vector<int>indices;
-    for (int i = 0; i < n; i++) {
-        if (s1[0]==s2[i]) {
-            indices.push_back(i);
-        }
-    }
-
-
-    for (auto v : indices) {
-        int i=1;
-        int j=(v+1)%n;
-        int count=1;
-        while (i<n && s1[i] == s2[j]) {
-            i++;
-            j=(j+1)%n;
-            count++;
-        }
-        if (count==n) {
-            return true;
-        }
-    }
-    return false;
+    string combined = s1+s1;
+    return (combined.find(s2)!=string::npos);
 }
 
 int main(int argc, char *argv[]) {
