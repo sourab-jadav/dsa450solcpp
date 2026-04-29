@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 
@@ -24,11 +25,31 @@ bool method1(string &s1,string &s2,string &result){
     //
     //  apply three pointer approach
     //  if something that is found in s1 but not in result we return false
-
+    return false;
   }
 int main(int argc, char *argv[])
 {
-    cout << "this is the world we live in" << "\n";
+    // converting string to number
+    string s="45";
+    int num= stoi(s);
+
+    // integer to string
+    int num2=45;
+    string s2= to_string(num);
+
+    // char to int
+    char c='2';
+    int num3=c-'0';
+
+    // int to char
+    int val=45;
+    char d= val+'0';
+
+    // char to it's ascii value
+    char e='A';
+    int asciivalue = (int)e;
+
+
 
     return 0;
 }
