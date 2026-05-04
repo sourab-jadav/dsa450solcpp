@@ -15,11 +15,14 @@ using namespace std;
  * will be the reduntant amount of spaces
  * and it's result will be considered for total_cost calculation
  */
-int method1(vector<int>&vec,int n,int k,int i){
+int method1(vector<int>&vec,int n,int k,int i,vector<int>&memo){
 
     int result=INT_MAX;
     int consider=0;
     int cost{};
+    if (memo[i]!=-1) {
+        return memo[i];
+    }
 
   for (int j = i; j < n; j++) {
 
@@ -32,7 +35,7 @@ int method1(vector<int>&vec,int n,int k,int i){
       if (consider<=k) {
           cost=(k-consider);
           cost=cost*cost;
-          result=min(result,cost+method1(vec, n, k, j+1));
+          result=min(result,cost+method1(vec, n, k, j+1,memo));
       }else{
           break;
       }
@@ -40,7 +43,7 @@ int method1(vector<int>&vec,int n,int k,int i){
           return 0;
       }
     }
-  return result;
+  return memo[i]=result;
 }
 
 int main(int argc, char *argv[])
@@ -48,7 +51,8 @@ int main(int argc, char *argv[])
     vector<int>vec{3,2,2,5};
     int n=vec.size();
     int k=6;
-    cout << method1(vec, n, k, 0) << "\n";
+    vector<int>memo(n,-1);
+    cout << method1(vec, n, k, 0,memo) << "\n";
 
     // objective is to minimize the total cost
 
