@@ -5,29 +5,60 @@
 #include <utility>
 #include <vector>
 #include <set>
+#include <unordered_map>
+
 
 using namespace std;
-void printPermutations(string s,int i,int n,vector<string>&vec) {
+void findUniquePermuatations( unordered_map<char, int> mp, int i,string curr,
+                              int n,vector<string>&res) {
     if (i==n) {
-      if (find(vec.begin(), vec.end(), s) == vec.end()) {
-          vec.push_back(s);
+        res.push_back(curr);
+        return;
+    }
+    for (auto p : mp) {
+        char c= p.first;
+        int cnt=p.second;
+        if (cnt==0) {
+            continue;
         }
+        curr.push_back(c);
+        mp[c]--;
+        findUniquePermuatations(mp, i+1, curr, n, res);
+        curr.pop_back();
+        mp[c]++;
     }
+}
+vector<string> findPermutations(string &s) {
+    // we need to find only unique permutations
+    // if we have considered a particular character as part of
+    // permutation
+    // then we can skip the iteration of that character
 
-    for (int j = i; j < n; j++) {
-        swap(s[i],s[j]);
-        printPermutations(s, i+1, n,vec);
-        swap(s[i],s[j]);
+    /**
+     * you need
+     * unordered_map<char,int> mp;
+     *
+     */
+    unordered_map<char, int>mp;
+    for (auto c : s) {
+        mp[c]+=1;
     }
+    int n=s.size();
+    vector<string>result;
+    findUniquePermuatations(mp, 0, "", n, result);
+    return result;
 }
 int main(int argc, char *argv[])
 {
-    string s="AAA";
-    int n=s.size();
-    vector<string>vec;
-    printPermutations(s, 0, n,vec);
-    set<string>result(vec.begin(),vec.end());
-    vec.clear();
+    string s="ABC";
+    vector<string>result=findPermutations(s);
+    for (auto str : result) {
+        cout << str << " ";
+    }
+    cout<<endl;
+
+    // the idea is to use cnt map of each character
+
 
 
     return 0;
