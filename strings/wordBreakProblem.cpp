@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool check(vector<string> &dictionary, string s,int j) {
+bool check(vector<string> &dictionary, string s,int j,vector<int>&memo) {
     if (j==s.size()) {
         return true;
     }
@@ -12,7 +12,7 @@ bool check(vector<string> &dictionary, string s,int j) {
     // you need to check if you can make a string out of
     // it who's value is equal to provided s
     for (auto dict : dictionary) {
-        if (dict==s.substr(j,dict.size()) && check(dictionary, s, j+dict.size())) {
+        if (dict==s.substr(j,dict.size()) && check(dictionary, s, j+dict.size(),memo)) {
             return true;
         }
     }
@@ -24,8 +24,7 @@ int main(int argc, char *argv[])
     string s = "xkfkobbnsmbnsm";
     vector<string>dic{    "xkfko","b","bnsm","jg"};
     // vector<string>dic{"i","like","gfg"};
-    cout << check(dic,s,0) << "\n";
-
-
+    vector<int>memo(s.size(),-1);
+    cout << check(dic,s,0,memo) << "\n";
     return 0;
 }
