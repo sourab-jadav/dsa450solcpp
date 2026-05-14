@@ -22,19 +22,21 @@ int main(int argc, char *argv[])
     // string pattern="geeks";     // tc passed ;)
     // string text= "abesdu" ;
     // string pattern = " edu";
-    string text ="aabaacaadaabaaba";
-    string pattern="aaba";
-    //
+    string txt ="aabaacaadaabaaba"; // what if there is a pattern
+                                     // inside the found pattern
+    // string text ="aabaaba";          // like this
+    string pat="aaba";
+
     // we need to find this pattern in the above text
-    int n=text.size();
-    int m=pattern.size();
+    int n=txt.size();
+    int m=pat.size();
     for (int i = 0; i <= n-m; ) {
         // the goal is o n time
-        if (text[i]==pattern[0]) {
-            int t=check(text, pattern, i);
+        if (txt[i]==pat[0]) {
+            int t=check(txt, pat, i);
             if (t==i) {
                 cout << t << "\n";
-                i+=i+m;
+                i=t+1;
             } else {
                 i=t;
             }
