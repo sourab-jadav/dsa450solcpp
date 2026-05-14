@@ -10,7 +10,7 @@ using namespace std;
 int check(string &text, string &pattern,int i) {
   for (int j = i, k = 0; j < i + pattern.size(); j++, k++) {
       if (text[j]!=pattern[k]) {
-          return j+1;
+          return i+1;
       }
     }
   return i;
@@ -22,11 +22,13 @@ int main(int argc, char *argv[])
     // string pattern="geeks";     // tc passed ;)
     // string text= "abesdu" ;
     // string pattern = " edu";
-    string txt ="aabaacaadaabaaba"; // what if there is a pattern
-                                     // inside the found pattern
-    // string text ="aabaaba";          // like this
-    string pat="aaba";
+    // string txt ="aabaacaadaabaaba"; // what if there is a pattern
+    //                                  // inside the found pattern
+    // // string text ="aabaaba";          // like this
+    // string pat="aaba";
 
+    string txt="vxqxxqxqxc";
+    string pat="xqx";
     // we need to find this pattern in the above text
     int n=txt.size();
     int m=pat.size();
