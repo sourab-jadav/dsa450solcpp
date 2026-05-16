@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -6,44 +7,41 @@ using namespace std;
  * given string text
  * rabinkarp is a pattern finding algorithm
  * find all zero-based starting indices pattern occurs as substring in a text
+ * can we compute a hashfunction out of it
+ *
  */
-int check(string &text, string &pattern,int i) {
-  for (int j = i, k = 0; j < i + pattern.size(); j++, k++) {
-      if (text[j]!=pattern[k]) {
-          return i+1;
-      }
-    }
-  return i;
-}
+int main(int argc, char *argv[]) {
 
-int main(int argc, char *argv[])
-{
-    // string text ="geeksforgeeks";
-    // string pattern="geeks";     // tc passed ;)
-    // string text= "abesdu" ;
-    // string pattern = " edu";
-    // string txt ="aabaacaadaabaaba"; // what if there is a pattern
-    //                                  // inside the found pattern
-    // // string text ="aabaaba";          // like this
-    // string pat="aaba";
-
-    string txt="vxqxxqxqxc";
-    string pat="xqx";
+    string txt = "vxqxxqxqxc";
+    string pat = "xqx";
+    vector<int> hash(txt.size(), 0);
     // we need to find this pattern in the above text
-    int n=txt.size();
-    int m=pat.size();
-    for (int i = 0; i <= n-m; ) {
-        // the goal is o n time
-        if (txt[i]==pat[0]) {
-            int t=check(txt, pat, i);
-            if (t==i) {
-                cout << t << "\n";
-                i=t+1;
-            } else {
-                i=t;
+    int n = txt.size();
+    int m = pat.size();
+    int pat_hash{};
+    for (auto x : pat) {
+        pat_hash += x;
+    }
+    int curr_hash{};
+    for (int i = 0; i < m; i++) {
+        curr_hash += txt[i];
+    }
+    hash[0] = curr_hash;
+    for (int i = 1; i <= n - m; i++) {
+        curr_hash = curr_hash - txt[i - 1] + txt[i + m - 1];
+        hash[i] = curr_hash;
+    }
+    for (int i = 0; i <= n - m; i++) {
+        if (hash[i] == pat_hash) {
+            int j;
+            for (j = 0; j < m; j++) {
+                if (txt[i+j]!=pat[j]) {
+                    break;
+                }
             }
-        }else{
-            i++;
+            if (j==m) {
+                cout << i << "\n";
+            }
         }
     }
     return 0;
