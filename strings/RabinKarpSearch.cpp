@@ -5,97 +5,78 @@
 
 using namespace std;
 
-/**
- * given string text
- * rabinkarp is a pattern finding algorithm
- * find all zero-based starting indices pattern occurs as substring in a text
- * can we compute a hashfunction out of it
- *
- */
 
+int longestProperPrefixSuffix(string &txt,string &pat,int i) {
+    int j=pat.size()-2;
 
+    // in kmp we need to find proper prefix of pattern
+    // which is present as suffix in the window
 
-pair<bool,int> check(string txt,string pat,int i){
-    // checking if the window matches the pat
-    // if yes also finding the longest suffix which is a prefix say l
-    // and moving the j by l characters for the next match
-    int m=pat.length();
-    int cnt{};
-    bool flag=false;
-    pair<bool, int>p;
-    for (int j = 0; j < m; j++) {
-        if (txt[i+j]!=pat[j]) {
-            return {false,-1};
-        }
-        if (j!=0 && txt[i+j]==pat[0]) {
-            string sf=txt.substr(i+j,m-j);
-            string pf=pat.substr(0,m-j);
-            if (sf==pf && !flag) {
-                p.first=true;
-                flag=true;
-                p.second=pf.size();
-                cout << sf<<" == "<<pf <<" for i "<<i<<" j is "<<j<< "\n";
+    for (int k = j; k >= 0;k-- ) {
+        if (pat[k]==txt[i]) {
+            int t=k;
+            int l=i;
+            while (t>=0) {
+                if (pat[t]!=txt[l]) {
+                    break;
+                }
+                t--;
+                l--;
+            }
+            if (t<0) {
+                return k+1;
             }
         }
     }
-    if (flag) {
-        return p;
-    }else{
-        return {false,i};
-    }
+    return 0;
 }
 
 
-// focus on writing clean code
-vector<int> kmpSearch(string &txt,string &pat){
-
-    // we have to find where pat is present in txt
-    int n=txt.length();
-    int m =pat.length();
-
-    int j{};
-    int cnt={};
-    int k=-1;
+void kmpSearch(string &txt,string &pat){
+    int n=txt.size();
+    int m=pat.size();
     vector<int>result;
-    for (int i = 0; i < n; ) {
-        pair<bool, int>t=check(txt, pat, i);
-        if (t.second!=-1) {
-            result.push_back(i);
-            if (t.first) {
-                // partially matched
-                int o=i+m;
-                int k=o;
-                cout << "k is "<<k <<" for "<<i << "\n";
-
-                int j{};
-                for ( j = t.second; j < m; j++) {
-                    cout << "for i "<<i<<" j value is "<<j << "\n";
-
-                    if (k<n && j<m && pat[j]!=txt[k]) {
-
-                        i=o+1;
-                        break;
-                    } else {
-                        k++;
-                    }
-                }
-                cout << "for i "<<i<<" j value is "<<j << "\n";
-
-                if (j==m) {
-                    result.push_back(k-m);
-                    --k;
-                    i=k;
-                }
+    // here we are doing sliding window shifting by +m
+    // in every iteration
+    // we we found a proper prefix of pattern which is
+    // present as suffix in the current window
+    //
+    // then we shift the j by l for next match
+    // and for i we do i+(m-l);
+    //
+    int l{};
+    int j{};
+    for (int i = 0; i <= n - m; ) {
+        bool flag=false;
+        for(int c=0;c<m-l;c++){
+            cout << "for i "<<i<<" j value is "<<j << "\n";
+            if (txt[i+j]!=pat[j]) {
+                cout << txt[i+j]<<" !=="<<pat[j] << "\n";
+                flag=true;
+                break;
             } else {
-                i=i+m;
+                cout << txt[i+j]<<" ===="<<pat[j] << "\n";
+
             }
+            j=(j+1)%m;
+        }
+        if (!flag) {
+            cout<<"catched for " << i << " ";
+            cout<<endl;
         } else {
-            i=i+1;
+            j=0;
+        }
+        l=longestProperPrefixSuffix(txt, pat, i+m-1);
+        cout << "l value at "<<i <<" is "<<l << "\n";
+
+        if (l>0) {
+            i+=m-l;
+            j=(j+l)%m;
+        } else {
+            i+=m;
         }
     }
-    return result;
 }
-
 
 int main(int argc, char *argv[]) {
 
@@ -117,12 +98,12 @@ int main(int argc, char *argv[]) {
 
 
     // string txt = "geeksforgeeks", pat = "geek";
-    vector<int>res=kmpSearch(txt, pat);
+kmpSearch(txt, pat);
 
     // we need to find a way so that we can loop an index over the pattern
-    for (auto val : res) {
-        cout << val << " ";
-    }
+    // for (auto val : res) {
+    //     cout << val << " ";
+    // }
     cout<<endl;
 
 
