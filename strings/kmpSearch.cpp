@@ -37,9 +37,9 @@ int longestProperPrefixSuffix(string &txt,string &pat,int i) {
 
 
 // optimized lps area implimentation
-void optimizedLPS(vector<int> &lps, string &txt, string &pat) {
-    int n=txt.length();
-    int m=pat.length();
+void optimizedLPS(vector<int> &lps, string &pat) {
+    int n=pat.length();
+
 
     // for length 1 lps is always 0
     // for length 2 if both equal then lps is 1
@@ -60,11 +60,12 @@ void optimizedLPS(vector<int> &lps, string &txt, string &pat) {
     lps[0]=0;
     // aabaacaadaabaaba
     // abcdabca
+    // 00001231
     for (int i = 1; i < n; i++) {
-        if (txt[i]==txt[len]) {
+        if (pat[i]==pat[len]) {
             lps[i]=++len;
         } else {
-            if (txt[i]==txt[i-1]) {
+            if (pat[i]==pat[i-1]) {
                 lps[i]=lps[i-1];
             } else {
                 lps[i]=0;
@@ -78,57 +79,13 @@ void optimizedLPS(vector<int> &lps, string &txt, string &pat) {
     cout<<endl;
 }
 
-// void kmpSearch(string &txt,string &pat){
-//     int n=txt.size();
-//     int m=pat.size();
-//     vector<int>result;
-//     // here we are doing sliding window shifting by +m
-//     // in every iteration
-//     // we we found a proper prefix of pattern which is
-//     // present as suffix in the current window
-//     //
-//     // then we shift the j by l for next match
-//     // and for i we do i+(m-l);
-//     //
-//     int l{};
-//     int j{};
-//     for (int i = 0; i <= n - m; ) {
-//         bool flag=false;
-//         for(int c=0;c<m-l;c++){
-//             cout << "for i "<<i<<" j value is "<<j << "\n";
-//             if (txt[i+j]!=pat[j]) {
-//                 cout << txt[i+j]<<" !=="<<pat[j] << "\n";
-//                 flag=true;
-//                 break;
-//             } else {
-//                 cout << txt[i+j]<<" ===="<<pat[j] << "\n";
 
-//             }
-//             j=(j+1)%m;
-//         }
-//         if (!flag) {
-//             cout<<"catched for " << i << " ";
-//             cout<<endl;
-//         } else {
-//             j=0;
-//         }
-//         l=longestProperPrefixSuffix(txt, pat, i+m-1);
-//         cout << "l value at "<<i <<" is "<<l << "\n";
-
-//         if (l>0) {
-//             i+=m-l;
-//             j=(j+l)%m;
-//         } else {
-//             i+=m;
-//         }
-//     }
-// }
 
 int main(int argc, char *argv[]) {
 
 
-    // string txt="aabaacaadaabaaba";
-    // string pat = "aaba";
+    string txt="aabaacaadaabaaba";
+    string pat = "aaba";
 
     // string txt = "abesdu", pat = "edu";;
     // string txt = "geeksforgeeks", pat = "geek";
@@ -142,23 +99,42 @@ int main(int argc, char *argv[]) {
     // cout << txt << "\n";
     // cout << pat << "\n";
 
-    string txt="aabaaac";
-    string pat="";
+    // string txt="aabaaac";
+    // string pat="";
     vector<int>lps(txt.length(),0);
     // string txt="ABCDE";
-    optimizedLPS(lps, txt, pat);
+    optimizedLPS(lps, pat);
+    cout << "lps array is :" << "\n";
 
-
-
+    for (auto v : lps) {
+        cout << v << " ";
+    }
     cout<<endl;
-    // string txt = "geeksforgeeks", pat = "geek";
-// kmpSearch(txt, pat);
 
-    // we need to find a way so that we can loop an index over the pattern
-    // for (auto val : res) {
-    //     cout << val << " ";
-    // }
-    cout<<endl;
+    int i=0;
+    int j=0;
+    int n=txt.length();
+    int m=pat.length();
+
+    while (i<n) {
+
+        if (txt[i]==pat[j]) {
+            i++;
+            j++;
+        }
+        if (j==m) {
+            cout << i-m << "\n";
+            j=lps[j-1];
+        }else if (i<n && txt[i]!=pat[j]) {
+            if (j!=0) {
+                j=lps[j-1];
+            } else {
+                i++;
+            }
+        }
+
+    }
+
 
 
 
