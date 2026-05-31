@@ -1,0 +1,7 @@
+* idea of 0 based and 1 based indexing in reducing the size of array by m
+in many problems you will have to do n-m
+# the idea is to assume m as 1 based indexing
+# if(A)= n is taken as 1 based doing n-m will point the index to the starting of right(removed) the window
+# if(B)= n is taken as 0 based then doing n-m will point the index the end of the left window
+#
+# if m is taken as 0 based indexing (A)+1 points to the second index from the starting of right windowcg
