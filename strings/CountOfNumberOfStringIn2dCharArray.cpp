@@ -1,84 +1,60 @@
+#include <algorithm>
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <cstring>
+
+#define NO_OF_CHARS 256
 
 using namespace std;
 
-int findOccurrence(vector<vector<char>> &mat, string target) {
-    int m=mat.size();
-    int n=mat[0].size();
-    int t=target.size();
-    vector<pair<int, int>>p;
+// todo write a search function which searches for a vector in 2d matrix
+
+void search(string txt,string pat){
+    // we have to write using boyer mayer's search algorithm
+
+    // it searches from the end
+    //
+    // at index j txt[s+j] != pat[j]
+    // the char = txt[s+j] is present on the left side of pat
+    // i.e towards the lesser index(left side)
+    // then we shift the window on txt towards right by the length of j-badchar[txt[s+j]];
+    //
+    // at index j txt[s+j] == pat[j] matched the whole window and j became <0
+    // now we see where the char at index s+m in txt lies in pat
+    // say that char at m in txt is present at index 3 in pat(index in pat formed towards left of j)
+    // then you have to do m-3
+
+    int m=pat.length();
+    int n=txt.length();
+    int badchar[NO_OF_CHARS];
+    memset(badchar, -1, sizeof(badchar));
     for (int i = 0; i < m; i++) {
-      for (int j = 0; j < n; j++) {
-          if (mat[i][j]==target[0]) {
-              p.push_back({i,j});
-          }
+        badchar[pat[i]]=i;
+    }
+    int s=0;
+    while (s<=n-m) {
+        int j=m-1;
+        while (j>=0 && pat[j]==txt[s+j]) {
+            j--;
+        }
+        if (j<0) {
+            // means the window starting from s matched
+            cout << "matched at index "<<s << "\n";
+            s+=s+m<n?m-badchar[txt[s+m]]:1;
+        }else{
+            // value at j in pat did not matched with value at s+j in
+            // if the value at s+j is present in pat on the left side of j
+            // shift the window of txt towards left by decreasing it's value
+            // s+=j-badarr[txt[s+j]]
+            //
+            // if the value at s+j is present in pat on the right side of j
+            s+=max(1,j-badchar[txt[s+j]]);
         }
     }
-    for (auto v : p) {
-        cout << v.first<<" "<<v.second << "\n";
-
-
-    }
-
-    int count{};
-    for (auto v : p) {
-        int i=v.first;
-        int j=v.second;
-        if (i+t-1<m) {
-            // bottom
-            int k=i+1;
-            int l=1;
-            while (k<m && l<=t && target[l]==mat[k][j]) {
-                l++;
-                k++;
-            }
-            if (l==target.size()) {
-                count++;
-            }
-        }
-        // top
-        if (i-t+1>=0) {
-            int l=1;
-            int k=i-1;
-            while (k>=0 && l<=t && target[l]==mat[k][j]) {
-                l++;
-                k--;
-            }
-            if (l==target.size()) {
-                count++;
-            }
-        }
-        // left
-        if (j-t+1>=0) {
-            int l=1;
-            int k=j-1;
-            while (k>=0 && l<=t && target[l]==mat[i][k]) {
-                l++;
-                k--;
-            }
-            if (l==target.size()) {
-                count++;
-            }
-        }
-        // right
-        if (j+t-1<n) {
-            int l=1;
-            int k=j+1;
-            while (k<n && l<=t && target[l]==mat[i][k]) {
-                l++;
-                k++;
-            }
-            if (l==target.size()) {
-                count++;
-            }
-        }
-
-    }
-    return count;
-
 }
+
+
 
 
 int main(int argc, char *argv[])
@@ -86,26 +62,5 @@ int main(int argc, char *argv[])
 
     // find if a string occurs in a row or column
     string target="SNAKES";
-
-
-    // vector<vector<char>>     a = {
-    //         {'B','B','M','B','B','B'},
-    //         {'C','B','A','B','B','B'},
-    //         {'I','B','G','B','B','B'},
-    //         {'G','B','I','B','B','B'},
-    //         {'A','B','C','B','B','B'},
-    //         {'M','C','I','G','A','M'}
-    // };
-    vector<vector<char>> a = {
-        {'S','N','B','S','N'},
-        {'B','A','K','E','A'},
-        {'B','K','B','B','K'},
-        {'S','E','B','S','E'},
-    };
-    cout << findOccurrence(a, target) << "\n";
-
-
-
-
     return 0;
 }
