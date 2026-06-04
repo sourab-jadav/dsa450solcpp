@@ -17,6 +17,7 @@ int solve(string s1, string s2, int n, int m,vector<vector<int>>&dp) {
     }
     return dp[n][m]=max(solve(s1, s2, n+1, m,dp),solve(s1, s2, n, m+1,dp));
 }
+
 int lcs(string &s1, string &s2) {
     // code here
     int n=s1.size();
@@ -24,9 +25,28 @@ int lcs(string &s1, string &s2) {
     vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
     return solve(s1,s2,0,0,dp);
 }
+
+
+int lcsDP(string &s1, string &s2) {
+    int n=s1.size();
+    int m=s2.size();
+
+    vector<vector<int>>dp(n+1,vector<int>(m+1,0));
+    for (int i = 1; i <= n; i++) {
+        for(int j=1; j<=m;j++){
+            if (s2[j-1]==s1[i-1]) {
+                dp[i][j]=1+dp[i-1][j-1];
+            } else {
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+          }
+    }
+    return dp[n][m];
+}
 int main(int argc, char *argv[])
 {
     string s1 = "ABCDGH", s2 = "AEDFHR";
+    cout << lcsDP(s1, s2) << "\n";
 
 
 
