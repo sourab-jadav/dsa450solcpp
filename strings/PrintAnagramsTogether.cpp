@@ -5,24 +5,25 @@
 
 using namespace std;
 
-int computeHash(string &str) {
-    int n=str.length();
-    int result=0;
-    for (auto c : str) {
-        result+=c;
-    }
-    return result;
-}
+
 
 int main(int argc, char *argv[])
 {
-    cout << "printing anagrams" << "\n";
+
     vector<string>arr{"act", "god", "cat", "dog", "tac"};
     int n=arr.size();
-    unordered_map<int, vector<string>>mp;
+    unordered_map<string, vector<string>>mp;
     for (auto s : arr) {
-        int x=computeHash(s);
-        mp[x].push_back(s);
+
+        vector<int>count(26,0);
+        for (auto c : s) {
+            count[c-'a']++;
+        }
+        string res="";
+        for (auto v  : count) {
+            res+=to_string(v)+"#";
+        }
+        mp[res].push_back(s);
     }
     vector<vector<string>>res;
     for (auto t : mp) {
