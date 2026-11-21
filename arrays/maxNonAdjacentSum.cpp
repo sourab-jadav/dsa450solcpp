@@ -46,3 +46,30 @@ public:
     return dp[n];
   }
 };
+
+
+
+// // Loop for all elements in arr[] and maintain two sums sum1 and
+// sum2l where sum1 = Max sum including the previous element and sum2
+// = Max sum excluding the previous element.
+
+// Max sum excluding the current element will be max(sum1, sum2) and
+// max sum including the current element will be sum2 + current
+// element (Note that only sum2 is considered because elements cannot
+// be adjacent).
+
+// At the end of the loop return max of sum1 and sum2.
+
+// little difficult to visualize
+// int FindMaxSum(int arr[], int n)
+// {
+//     int sum1 = arr[0];
+//     int sum2 = 0;
+//     int result;
+//     for (int i = 1; i < n; i++){
+//         result = (sum1 > sum2) ? sum1 : sum2;
+//         sum1 = sum2 + arr[i];
+//         sum2 = result;
+//     }
+//     return ((sum1 > sum2) ? sum1 : sum2);
+// }
