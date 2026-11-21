@@ -28,33 +28,73 @@ using namespace std;
 
 
 
+// class Solution {
+// public:
+//   vector<vector<int>> fourSum(vector<int> &nums, int target) {
+//       vector<vector<int>>result;
+//       std::set<vector<int>>set;
+//       int n = nums.size();
+//       sort(nums.begin(), nums.end());
+//       vector<vector<int>> output;
+//       for(int i=0;i<n-3;i++){
+//         for (int j = i + 1; j < n - 2; j++) {
+//             for(int k=j+1;k<n-1;k++){
+//                 for(int l=k+1;l<n;l++){
+//                       if ((long long)nums[i] + nums[j] + nums[k] + nums[l] == target) { // in cpp addition is left associative
+//                                                                                         // so making the leftmost element long long
+//                                                                                         // makes all other operands on the right long long
+//                           set.insert({nums[i], nums[j], nums[k], nums[l]});
+//                       }
+//                   }
+//               }
+//           }
+//       }
+//       for(auto it:set){
+//           result.push_back(it);
+//       }
+//       return result;
+//     }
+// };
+
+
+// efficient solutoin
+
 class Solution {
 public:
-  vector<vector<int>> fourSum(vector<int> &nums, int target) {
-      vector<vector<int>>result;
-      std::set<vector<int>>set;
-      int n = nums.size();
-      sort(nums.begin(), nums.end());
-      vector<vector<int>> output;
-      for(int i=0;i<n-3;i++){
-        for (int j = i + 1; j < n - 2; j++) {
-            for(int k=j+1;k<n-1;k++){
-                for(int l=k+1;l<n;l++){
-                      if ((long long)nums[i] + nums[j] + nums[k] + nums[l] == target) { // in cpp addition is left associative
-                                                                                        // so making the leftmost element long long
-                                                                                        // makes all other operands on the right long long
-                          set.insert({nums[i], nums[j], nums[k], nums[l]});
-                      }
-                  }
-              }
-          }
-      }
-      for(auto it:set){
-          result.push_back(it);
-      }
-      return result;
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+      // solved using 3 nexted loops + sorting + hashtable
+      // the optimization here is
+      // since it is sorted we can pick the last two elements using binary
+      // search
+         int n = nums.size();
+        sort(nums.begin(), nums.end());
+        set<vector<int>> set;
+        vector<vector<int>> output;
+        for(int i=0; i<n-3; i++){
+            for(int j=i+1; j<n-2; j++){
+                long long newTarget = (long long)target - nums[i] - nums[j];
+                int low = j+1, high = n-1;
+                while(low < high){
+                    if(nums[low] + nums[high] < newTarget){
+                        low++;
+                    }
+                    else if(nums[low] + nums[high] > newTarget){
+                        high--;
+                    }
+                    else{
+                        set.insert({nums[i], nums[j], nums[low], nums[high]});
+                        low++; high--;
+                    }
+                }
+            }
+        }
+        for(auto it : set){
+            output.push_back(it);
+        }
+        return output;
     }
 };
+
 
 int main(int argc, char *argv[])
 {
