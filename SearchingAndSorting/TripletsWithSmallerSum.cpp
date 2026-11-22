@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
 
 // 2026-11-22
 
@@ -39,31 +41,52 @@ using namespace std;
 /* optimization over recursiion*/
 class Solution {
 public:
-
-
   int countTriplets(int sum, vector<int> &arr) {
+      // one optimal approach is to fix the current element
+      // as part of the triplet and find the next two elements by binary search
+      int n = arr.size();
+      int count{};
+      sort(arr.begin(), arr.end());
 
-    int n = arr.size();
-    int count{};
-    for(int i=0;i<n;i++){
-        for(int j=i+1;j<n;j++){
-          for (int k = j + 1; k < n; k++) {
-              if (arr[i]+arr[j]+arr[k]<sum) {
-                  count++;
-              }
+      int i = 0;
+      while (i <= n - 3) {
+        int low = i + 1;
+        int high = n - 1;
+        while (low < high) {
+          long long result = (long long)arr[i] + arr[low] + arr[high];
+          if (result < sum) {
+
+            count += high - low;
+            low++;
+            while (arr[high] == arr[high - 1]) {
+              high--;
             }
+            while (arr[low] == arr[low + 1]) {
+              low++;
+            }
+
+          } else if (result >= sum) {
+            high--;
           }
-    }
-    return count;
+        }
+        if (i + 1 < n && arr[i] == arr[i + 1]) {
+          while (i + 1 < n && arr[i] == arr[i + 1]) {
+            i++;
+          }
+        } else {
+          i++;
+        }
+      }
+      return count;
   }
 };
 
 
 int main(int argc, char *argv[]) {
-  // vector<int> vec{-2, 0, 1, 3};
-  vector<int> vec{5, 1, 3, 4, 7};
+  vector<int> vec{-2, 0, 1, 3};
+  // vector<int> vec{5, 1, 3, 4, 7};
   Solution s;
-  cout << s.countTriplets(12, vec) << "\n";
+  cout << s.countTriplets(2, vec) << "\n";
 
   return 0;
 }
