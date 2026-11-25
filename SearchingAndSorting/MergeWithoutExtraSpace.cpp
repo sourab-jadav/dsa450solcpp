@@ -18,6 +18,10 @@ using namespace std;
 
 class Solution {
   public:
+    // Compare the largest element of a (a[n1 - 1]) with the smallest
+    // element of b (b[0]). Move backwards through a and forwards
+    // through b while a[left] > b[right], swapping them, and then
+    // sort both a and b.
     void printArrays(vector<int> &a, vector<int> &b) {
        // cout << "after rearring a values are "
        //     << "\n";
@@ -31,107 +35,25 @@ class Solution {
       cout << endl;
     }
     void mergeArrays(vector<int>&a ,vector<int>&b){
-        // applying the insertion method of insertion sort
+        int n1 = static_cast<int>(a.size());
+    int n2 = static_cast<int>(b.size());
+    if (n1 == 0 || n2 == 0) return;
 
-        int n1=a.size();
-        int n2=b.size();
+    int left = n1 - 1;
+    int right = 0;
 
-        // n1 > n2
-
-        int i=0,j=0;
-        while (i<n1 && j<n2) {
-            // if the control goes out of this loap then one of the arrray is sorted
-
-            // since filling starts from a skip the elements of a while a[i] < b[j]
-            while (a[i]<=b[j]) {
-                i++;
-            }
-
-            if (i<n1) {
-                // we have to bring the value of b[j]
-                int btemp = b[j];
-                int k= j-1;
-                while (k>=0) {
-                    b[k+1]=b[k];
-                    k--;
-                }
-                b[0]=a[n1-1];
-                int l=i;
-                // while (l+1<n1) {  // wrong logic
-                //     a[l+1]=a[l];
-                //     l++;
-                // }
-                for(int k=n1-2;k>=i;k--){
-                    a[k+1]=a[k];
-                }
-
-                // printArrays(a, b);
-
-                a[i]=btemp;
-                i++;
-                j++;
-
-            }else {
-
-
-                break;
-            }
-
+    while (left >= 0 && right < n2) {
+        if (a[left] > b[right]) {
+            swap(a[left], b[right]);
+            left--;
+            right++;
+        } else {
+            break;
         }
-        if (j==n2) {
-            return;
-        }else {
-            // apply insertion sort from i = 0 to i = j
-            // now the question is how do you array
-            // element from index 0 to index j to their correct positions
+    }
 
-
-            // here the minichallenge is
-            // here b[] is divided into two parts
-            // both are sorted individually we want to merge both parts without any extra space
-
-            if (b[j]<b[j-1]) {
-                // [10 15 20 13]
-
-                //  j -> 13
-                cout << "\n in middle" << "\n";
-                printArrays(a, b);
-
-                int i=0;
-                cout << "j value is "<<j << "\n";
-
-                while (b[i]<=b[j]) {
-                    i++;
-                }
-                cout << "i value is "<<i << "\n";
-
-                // now we have i and j
-                while (i<j && j<n2) {
-                    if (b[i]<=b[j]) {
-                        i++;
-                        continue;
-                    }
-                    // now value at i is > value at j
-                    int temp=b[j];
-                    for(int k=j-1;k>=i;k--){
-                        b[k+1]=b[k];
-                    }
-                    b[i]=temp;
-                    cout << "================" << "\n";
-                    cout << "for i "<<i<<" and j "<<j << "\n";
-                    printArrays(a
-                                , b);
-
-                    i++;
-                    j++;
-                }
-
-
-            }
-
-
-        }
-
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
     }
 
 };
