@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <bits/stdc++.h>
+#include <iostream>
+#include <shared_mutex>
 #include <vector>
 
 
@@ -62,15 +64,15 @@ class Solution {
                 for(int k=n1-2;k>=i;k--){
                     a[k+1]=a[k];
                 }
-                cout << "btemp value at i = "<<i<<" is "<<btemp << "\n";
-                printArrays(a, b);
+
+                // printArrays(a, b);
 
                 a[i]=btemp;
                 i++;
                 j++;
 
             }else {
-                cout << "at i "<<i<<" and j is "<<j<<" a[i] "<<a[i]<<" we are going into break" << "\n";
+
 
                 break;
             }
@@ -82,20 +84,66 @@ class Solution {
             // apply insertion sort from i = 0 to i = j
             // now the question is how do you array
             // element from index 0 to index j to their correct positions
-            sort(b.begin(),b.end());
+
+
+            // here the minichallenge is
+            // here b[] is divided into two parts
+            // both are sorted individually we want to merge both parts without any extra space
+
+            if (b[j]<b[j-1]) {
+                // [10 15 20 13]
+
+                //  j -> 13
+                cout << "\n in middle" << "\n";
+                printArrays(a, b);
+
+                int i=0;
+                cout << "j value is "<<j << "\n";
+
+                while (b[i]<=b[j]) {
+                    i++;
+                }
+                cout << "i value is "<<i << "\n";
+
+                // now we have i and j
+                while (i<j && j<n2) {
+                    if (b[i]<=b[j]) {
+                        i++;
+                        continue;
+                    }
+                    // now value at i is > value at j
+                    int temp=b[j];
+                    for(int k=j-1;k>=i;k--){
+                        b[k+1]=b[k];
+                    }
+                    b[i]=temp;
+                    cout << "================" << "\n";
+                    cout << "for i "<<i<<" and j "<<j << "\n";
+                    printArrays(a
+                                , b);
+
+                    i++;
+                    j++;
+                }
+
+
+            }
+
+
         }
+
     }
 
 };
 void printArrays(vector<int>vec1,vector<int>vec2){
     int n1=vec1.size();
     for(int i=0;i<n1;i++){
-        cout << vec1[i] << "\n";
+        cout << vec1[i] << " ";
     }
     cout<<endl;
     int n2=vec2.size();
     for(int i=0;i<n2;i++){
-        cout << vec2[i] << "\n";
+        cout << vec2[i] << " ";
 
     }
 }
@@ -103,11 +151,19 @@ void printArrays(vector<int>vec1,vector<int>vec2){
 int main(int argc, char *argv[])
 {
     // vector<int>a{2,4,7,10};
-    vector<int>a{1,5,9,10,15,20};
-    vector<int>b{2,3,8,13};
+
+
+    vector<int>a{2, 2, 3, 5, 6, 7};
+    vector<int>b    {0, 0, 0, 1, 2, 3, 4, 7, 7, 8, 9};
+
 
     Solution s;
+    cout << "bfore" << "\n";
+    printArrays(a, b);
+
     s.mergeArrays(a, b);
+    cout << "after" << "\n";
+
     printArrays(a, b);
     return 0;
 }
