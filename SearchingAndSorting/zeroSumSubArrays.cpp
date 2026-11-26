@@ -13,17 +13,18 @@ using namespace std;
 class Solution {
   public:
     int findSubarray(vector<int> &arr) {
-      int n = arr.size();
+        unordered_map<long long, int> freq;
+      freq[0] = 1;
+
+      long long prefixSum = 0;
       int count = 0;
-      for (int i = 0; i < n; i++) {
-        int sum = 0;
-        for (int j = i; j < n; j++) {
-          sum += arr[j];
-          if (sum == 0) {
-            count += 1;
-          }
-        }
+
+      for (int x : arr) {
+        prefixSum += x;
+        count += freq[prefixSum];
+        freq[prefixSum]++;
       }
+
       return count;
     }
 };
