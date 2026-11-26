@@ -27,10 +27,17 @@
 
 #include <algorithm>
 #include <bits/stdc++.h>
+#include <vector>
 
 using namespace std;
 class Solution {
   public:
+
+    struct Item{
+        int value;
+        int index;
+        unsigned int bits;
+    };
 
     unsigned int countSetBits(int num) {
         // the aim is  to count the number of setbits
@@ -65,11 +72,25 @@ class Solution {
         return bits;
     }
      vector<int> sortBySetBitCount(vector<int>& arr) {
-         stable_sort(arr.begin(),arr.end(),[this](int a,int b){ // you have to pass the context inside []
-             return countSetBits(a) > countSetBits(b);          // else this function it caannot know where is this function
-         });
-         return arr;
+         vector<Item>vec;
+         int n=arr.size();
 
+         for(int i=0;i<n;i++){
+             vec.push_back({arr[i],i,countSetBits(arr[i])});
+         }
+
+         sort(vec.begin(),vec.end(),[this](Item a,Item b){
+             if (a.bits != b.bits) {
+                 return a.bits > b.bits;
+             }
+             return a.index < b.index;
+         });
+
+         vector<int> result;
+         for(int i=0;i<n;i++){
+             result.push_back(vec[i].value);
+         }
+         return result;
 
     }
 };
