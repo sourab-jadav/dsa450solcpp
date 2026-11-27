@@ -50,6 +50,28 @@ using namespace std;
 // In the first round, Bishu's power is 3, which is greater than 3 soldiers, with the cumulative power of 6. Hence, the answer is 3 6
 
 // Similarly for the next round.
+int binarySearch_upperbound(vector<int>vec,int M){
+    int n=vec.size();
+
+    // finding the upperbound using the binary search
+    int low=0;
+    int high=n-1;
+
+    // 1+4 / 2 // 2+3 /2 -> 2
+    int result{};
+    while (low<=high) {
+        int mid=(high+low)/2;
+        if (vec[mid]==M) {
+            return mid;
+        }else if(vec[mid]<M){
+            result=mid;
+            low=mid+1;
+        }else{
+            high=mid-1;
+        }
+    }
+    return result;
+}
 
 void solve(){
     int num{};
@@ -61,6 +83,12 @@ void solve(){
         vec.push_back(x);
     }
     sort(vec.begin(),vec.end());
+    vector<int>prefix(num,0);
+    int total{};
+    for(int i=0;i<num;i++){
+        total+=vec[i];
+        prefix[i]=total;
+    }
     int rounds{};
     cin>>rounds;
     for(int i=0;i<rounds;i++){
@@ -70,13 +98,8 @@ void solve(){
         int cp{};
 
         int j{};
-        while (j<num && vec[j]<=bpower) {
-            cp+=vec[j];
-            count++;
-            j++;
-        }
-        cout << count<<" "<<cp << "\n";
-
+        j=binarySearch_upperbound(vec, bpower);
+        cout << j+1<<" "<<prefix[j] << "\n";
     }
 
 }
