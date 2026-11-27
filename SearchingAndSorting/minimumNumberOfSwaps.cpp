@@ -1,8 +1,9 @@
 
 
-#include <algorithm>
-#include <bits/stdc++.h>
+#include <algorithm>            // has sort
 #include <unordered_map>
+#include <utility>              // has pair<>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -23,43 +24,34 @@ class Solution {
 
     // the golden rule: cycle of size k always takes k-1 swaps
     int minSwaps(vector<int>& arr) {
-
-        // o(n) space and o(n) for copying n elements
-        vector<int>temp=arr;
-
-        // o(nlogn) time uses introsort
-        sort(temp.begin(),temp.end());
-
-        unordered_map<int, bool>mp;
-        unordered_map<int, int>mp_to_index;
         int n=arr.size();
+        vector<pair<int, int>>vp;
 
-        // o(n) average case o(n^2) worst case
         for(int i=0;i<n;i++){
-            if (temp[i]==arr[i]) {
-                continue;
-            }else{
-                // o(1) average case o(n) worst case
-                mp_to_index[temp[i]]=i;
-            }
+            vp.push_back({arr[i],i});
         }
 
+        // o(nlogn) time uses introsort
+        sort(vp.begin(),vp.end(),[](auto p1,auto p2){
+            return p1.first<p2.first;
+        });
+
+        vector<bool>visited(n,false);
 
         int result{};
-
         // o(n) total for both loops(inner+outer)
         for(int i=0;i<n;i++){
-            if (mp[i] || arr[i] == temp[i]) {
+            if (visited[vp[i].second] || arr[i] == vp[i].first) {
                 continue;
             }
 
             // we need to get the index of arr[i]
-            int index=mp_to_index[arr[i]];
-            mp[index]=1;
+            int index=vp[i].second;
+            visited[index]=true;
             int count{};
             while (index!=i) {
-                index=mp_to_index[arr[index]];
-                mp[index]=1;
+                index=vp[index].second;
+                visited[index]=true;
                 count+=1;
             }
             result+=count;
